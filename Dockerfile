@@ -12,7 +12,7 @@ RUN apk -U upgrade && \
 COPY ./bin/entrypoint-lighttpd.sh /usr/local/bin/entrypoint-lighttpd.sh
 
 FROM lighttpd
-ARG BUILD_DATE="$(date +'%Y-%m-%d %H:%M')" 
+ARG BUILD_DATE="$(date +'%Y-%m-%d %H:%M')"
 
 LABEL \
   org.label-schema.name="lighttpd" \
@@ -26,7 +26,7 @@ LABEL \
   org.label-schema.vcs-type="Git" \
   org.label-schema.schema-version="1.0" \
   org.label-schema.vendor="CasjaysDev" \
-  maintainer="CasjaysDev <docker-admin@casjaysdev.com>" 
+  maintainer="CasjaysDev <docker-admin@casjaysdev.com>"
 
 
 LABEL maintainer="CasjaysDev <docker-admin@casjaysdev.com>" \
@@ -39,6 +39,6 @@ EXPOSE 80
 WORKDIR /htdocs
 VOLUME [ "/htdocs", "/config" ]
 
-HEALTHCHECK CMD ["/usr/local/bin/entrypoint-lighttpd.sh", "healthcheck"]
+HEALTHCHECK --interval=15s --timeout=3s CMD ["/usr/local/bin/entrypoint-lighttpd.sh", "healthcheck"]
 
 ENTRYPOINT ["/usr/local/bin/entrypoint-lighttpd.sh"]

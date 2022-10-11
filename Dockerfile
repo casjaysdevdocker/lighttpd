@@ -14,13 +14,15 @@ ENV TZ="$TIMEZONE" \
 
 RUN set -ex; \
   rm -Rf "/etc/apk/repositories"; \
+  mkdir -p "/usr/local/share/template-files/config/lighttpd/defaults"
   echo "http://dl-cdn.alpinelinux.org/alpine/$alpine_version/main" >> "/etc/apk/repositories"; \
   echo "http://dl-cdn.alpinelinux.org/alpine/$alpine_version/community" >> "/etc/apk/repositories"; \
   if [ "$alpine_version" = "edge" ]; then echo "http://dl-cdn.alpinelinux.org/alpine/$alpine_version/testing" >> "/etc/apk/repositories" ; fi ; \
   apk update --update-cache && apk add \
   lighttpd \
   lighttpd-mod_auth \
-  lighttpd-mod_webdav
+  lighttpd-mod_webdav && \
+  cp -Rf "/etc/lighttpd/." "/usr/local/share/template-files/config/lighttpd/defaults/"
 
 COPY ./bin/. /usr/local/bin/
 COPY ./data/. /usr/local/share/template-files/data/

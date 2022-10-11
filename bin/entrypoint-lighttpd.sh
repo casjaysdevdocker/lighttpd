@@ -42,8 +42,8 @@ else
   cp -Rf "/etc/lighttpd/lighttpd.conf" "/config/lighttpd.conf"
 fi
 
-if [ ! -f "/htdocs/www/index.html" ] || [ ! -f "/htdocs/www/index.php" ]; then
-  [ -f "/htdocs/.docker_complete" ] || cp -Rf "/var/www/localhost/htdocs/." "/htdocs/www"
+if [ ! -d "/data/htdocs/www" ] || [ ! -f "/htdocs/.docker_complete" ]; then
+  [ -f "/htdocs/.docker_complete" ] || cp -Rf "/usr/local/share/template-files/data/htdocs/www/." "/data/htdocs/www/"
   touch "/htdocs/.docker_complete"
 fi
 

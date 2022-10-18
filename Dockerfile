@@ -25,7 +25,7 @@ RUN set -ex; \
   lighttpd \
   lighttpd-mod_auth \
   lighttpd-mod_webdav && \
-  cp -Rf "/etc/lighttpd" "/usr/local/share/template-files/config/lighttpd/defaults/lighttpd"
+  cp -Rf "/etc/lighttpd" "$DEFAULT_TEMPLATE_DIR/lighttpd"
 
 RUN echo 'Running cleanup' ; \
   rm -Rf /usr/share/doc/* /usr/share/info/* /tmp/* /var/tmp/* ;   rm -Rf /usr/local/bin/.gitkeep /usr/local/bin/.gitkeep /config /data /var/cache/apk/* ; \

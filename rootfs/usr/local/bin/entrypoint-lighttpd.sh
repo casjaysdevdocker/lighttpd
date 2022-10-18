@@ -124,10 +124,11 @@ fi
 # Create directories
 [ -d "/etc/ssl" ] || mkdir -p "$SSL_CONTAINER_DIR"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Create files
+touch "/tmp/lighttpd.err.log"
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create symlinks
 ln -sf "/tmp/lighttpd.err.log" "/dev/stderr" && chmod 666 "/tmp/lighttpd.err.log"
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Create files
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 if [ "$SSL_ENABLED" = "true" ] || [ "$SSL_ENABLED" = "yes" ]; then

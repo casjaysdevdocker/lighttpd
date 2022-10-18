@@ -226,6 +226,7 @@ healthcheck) # Docker healthcheck
 *) # Execute primary command
   if [ $# -eq 0 ]; then
     echo "Container ip address is: $CONTAINER_IP_ADDRESS"
+    php-fpm-server &
     start-lighttpd
     exit ${exitCode:-$?}
   else

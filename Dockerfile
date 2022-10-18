@@ -1,4 +1,4 @@
-FROM casjaysdevdocker/php:latest AS build
+FROM casjaysdevdocker/alpine:latest AS build
 
 ARG ALPINE_VERSION="v3.16"
 
@@ -10,7 +10,9 @@ ENV LANG=en_US.utf8 \
   ENV=ENV=~/.bashrc \
   TZ="America/New_York" \
   SHELL="/bin/sh" \
-  TERM="xterm-256color"
+  TERM="xterm-256color" \
+  TIMEZONE="${TZ:-$TIMEZONE}" \
+  HOSTNAME="casjaysdev-lighttpd"
 
 COPY ./rootfs/. /
 
@@ -22,10 +24,9 @@ RUN set -ex; \
   if [ "${ALPINE_VERSION}" = "edge" ]; then echo "http://dl-cdn.alpinelinux.org/alpine/${ALPINE_VERSION}/testing" >>"/etc/apk/repositories" ; fi ; \
   apk update --update-cache && apk add \
   bash iproute2 \
-  lighttpd \
-  lighttpd-mod_auth \
-  lighttpd-mod_webdav && \
+  lighttpd lighttpd-mod_auth lighttpd-mod_webdav && \
   cp -Rf "/etc/lighttpd" "$DEFAULT_TEMPLATE_DIR/lighttpd"
+
 
 RUN echo 'Running cleanup' ; \
   rm -Rf /usr/share/doc/* /usr/share/info/* /tmp/* /var/tmp/* ;   rm -Rf /usr/local/bin/.gitkeep /usr/local/bin/.gitkeep /config /data /var/cache/apk/* ; \
@@ -49,7 +50,7 @@ ARG \
   BUILD_VERSION="latest" \
   LICENSE="MIT" \
   IMAGE_NAME="lighttpd" \
-  BUILD_DATE="Tue 18 Oct 2022 01:14:04 PM EDT" \
+  BUILD_DATE="Tue 18 Oct 2022 04:46:07 PM EDT" \
   TIMEZONE="America/New_York"
 
 LABEL maintainer="CasjaysDev <docker-admin@casjaysdev.com>" \

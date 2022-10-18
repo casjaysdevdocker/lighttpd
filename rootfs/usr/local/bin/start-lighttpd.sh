@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-##@Version           :  202210181320-git
+##@Version           :  202210181648-git
 # @@Author           :  Jason Hempstead
 # @@Contact          :  jason@casjaysdev.com
 # @@License          :  LICENSE.md
-# @@ReadME           :  start-lighttpd --help
+# @@ReadME           :  start-lighttpd.sh --help
 # @@Copyright        :  Copyright: (c) 2022 Jason Hempstead, Casjays Developments
-# @@Created          :  Tuesday, Oct 18, 2022 13:20 EDT
-# @@File             :  start-lighttpd
+# @@Created          :  Tuesday, Oct 18, 2022 16:48 EDT
+# @@File             :  start-lighttpd.sh
 # @@Description      :
 # @@Changelog        :  New script
 # @@TODO             :  Better documentation
@@ -19,9 +19,10 @@
 # @@Template         :  other/start-service
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Set functions
-__pgrep() { ps aux 2>/dev/null | grep -Fw " $@" | grep -qv 'grep' || return 10; }
+__pcheck() { [ -n "$(which pgrep 2>/dev/null)" ] && pgrep "$1" || return 1; }
 __find() { find "$1" -mindepth 1 -type f,d 2>/dev/null | grep '^' || return 10; }
 __curl() { curl -q -LSsf -o /dev/null -s -w "200" "$@" 2>/dev/null || return 10; }
+__pgrep() { __pcheck "$1" || ps aux 2>/dev/null | grep -F " $1" | grep -qv 'grep' || return 10; }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 __certbot() {
   [ -n "$SSL_CERT_BOT" ] && type -P certbot &>/dev/null || { export SSL_CERT_BOT="" && return 10; }
@@ -47,7 +48,7 @@ HTTP_PORT="${HTTP_PORT:-80}"
 HTTPS_PORT="${HTTPS_PORT:-443}"
 SERVICE_PORT="${SERVICE_PORT:-}"
 SERVICE_NAME="${CONTAINER_NAME}"
-HOSTNAME="${HOSTNAME:-casjaysdev-bin}"
+HOSTNAME="${HOSTNAME:-casjaysdev-lighttpd}"
 HOSTADMIN="${HOSTADMIN:-root@${DOMANNAME:-$HOSTNAME}}"
 SSL_CERT_BOT="${SSL_CERT_BOT:-false}"
 SSL_ENABLED="${SSL_ENABLED:-false}"
@@ -64,30 +65,32 @@ DEFAULT_TEMPLATE_DIR="${DEFAULT_TEMPLATE_DIR:-/usr/local/share/template-files/de
 CONTAINER_IP_ADDRESS="$(ip a | grep 'inet' | grep -v '127.0.0.1' | awk '{print $2}' | sed 's|/*||g')"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Overwrite variables
-SERVICE_NAME="lighttpd"
+#SERVICE_NAME=""
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create default config
-if [ -n "$DEFAULT_TEMPLATE_DIR" ] && [ -d "$DEFAULT_TEMPLATE_DIR/$SERVICE_NAME" ]; then
-  if [ ! -e "/config/$SERVICE_NAME" ]; then
-    cp -Rf "$DEFAULT_TEMPLATE_DIR/$SERVICE_NAME" "/config/$SERVICE_NAME"
-  fi
+if [ "$CONFIG_DIR_INITIALIZED" = "false" ] && [ -n "$DEFAULT_TEMPLATE_DIR" ]; then
+  [ -d "/config" ] && cp -Rf "$DEFAULT_TEMPLATE_DIR/." "/config/"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Copy custom config files
-if [ -n "$DEFAULT_CONF_DIR" ] && [ ! -e "/config/$SERVICE_NAME" ]; then
-  cp -Rf "$DEFAULT_CONF_DIR/$SERVICE_NAME" "/config/$SERVICE_NAME"
+if [ "$CONFIG_DIR_INITIALIZED" = "false" ] && [ -n "$DEFAULT_CONF_DIR" ]; then
+  [ -d "/config" ] && cp -Rf "$DEFAULT_CONF_DIR/." "/config/"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Copy custom data files
-if [ -n "$DEFAULT_DATA_DIR" ] && [ ! -e "/data/$SERVICE_NAME" ]; then
-  cp -Rf "$DEFAULT_DATA_DIR/$SERVICE_NAME" "/data/$SERVICE_NAME"
+if [ "$DATA_DIR_INITIALIZED" = "false" ] && [ -n "$DEFAULT_DATA_DIR" ]; then
+  [ -d "/data" ] && cp -Rf "$DEFAULT_DATA_DIR/." "/data/"
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Copy html files
-if [ -z "$(__find "$WWW_ROOT_DIR/www")" ] && [ -d "$DEFAULT_DATA_DIR/data/htdocs" ]; then
-  cp -Rf "$DEFAULT_DATA_DIR/data/htdocs/." "$WWW_ROOT_DIR/"
+if [ "$DATA_DIR_INITIALIZED" = "false" ] && [ -d "$DEFAULT_DATA_DIR/data/htdocs" ]; then
+  [ -d "/data" ] && cp -Rf "$DEFAULT_DATA_DIR/data/htdocs/." "$WWW_ROOT_DIR/"
 fi
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Initialized
+[ -d "/data" ] && touch "/data/.docker_has_run"
+[ -d "/config" ] && touch "/config/.docker_has_run"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # APP Variables overrides
 [ -f "/root/env.sh" ] && . "/root/env.sh"
@@ -108,7 +111,9 @@ healthcheck)
   if __pgrep "$SERVICE_NAME"; then
     echo "$SERVICE_NAME is running"
   else
-    exec lighttpd -f /config/lighttpd/lighttpd.conf -D
+    echo "Starting $SERVICE_NAME"
+    php-fpm-server &
+    start-lighttpd
   fi
   ;;
 esac

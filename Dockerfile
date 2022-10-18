@@ -24,7 +24,7 @@ RUN set -ex; \
   if [ "${ALPINE_VERSION}" = "edge" ]; then echo "http://dl-cdn.alpinelinux.org/alpine/${ALPINE_VERSION}/testing" >>"/etc/apk/repositories" ; fi ; \
   apk update --update-cache && apk add \
   bash iproute2 \
-  lighttpd lighttpd-mod_auth lighttpd-mod_webdav && \
+  spawn-fcgi lighttpd lighttpd-mod_auth lighttpd-mod_webdav && \
   cp -Rf "/etc/lighttpd" "$DEFAULT_TEMPLATE_DIR/lighttpd"
 
 

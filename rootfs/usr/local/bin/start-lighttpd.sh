@@ -113,7 +113,7 @@ healthcheck)
   else
     echo "Starting $SERVICE_NAME"
     php-fpm-server &
-    start-lighttpd
+    exec lighttpd -f /config/lighttpd/lighttpd.conf -D
   fi
   ;;
 esac

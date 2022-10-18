@@ -124,6 +124,9 @@ fi
 # Create directories
 [ -d "/etc/ssl" ] || mkdir -p "$SSL_CONTAINER_DIR"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Create symlinks
+ln -sf "/tmp/lighttpd.err.log" "/dev/stderr" && chmod 666 "/tmp/lighttpd.err.log"
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Create files
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

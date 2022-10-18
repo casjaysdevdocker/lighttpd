@@ -24,7 +24,6 @@
   <link rel="apple-touch-icon" href="/images/icon.png" />
 
   <link rel="stylesheet" href="/css/index.css" />
-
   <script src="/js/errorpages/isup.js" defer></script>
   <script src="/js/errorpages/homepage.js" defer></script>
   <script src="/js/errorpages/loaddomain.js" defer></script>
@@ -37,13 +36,13 @@
 </head>
 
 <body>
-  <div class="container text-center">
+  <div class="h-100 container text-center">
     <h1 class="m-5">Congratulations</h1>
-    <h2>
+    <h3 class="main">
       You have successfully installed CasjaysDev's lighttpd container <br /><br />
       <a href="/info.php">Click here to check php status</a>
       <br /><br /><br /><br /><br />
-    </h2>
+    </h3>
   </div>
 </body>
 

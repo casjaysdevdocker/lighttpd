@@ -10,7 +10,7 @@ ENV LANG=en_US.utf8 \
   ENV=ENV=~/.bashrc \
   TZ="America/New_York" \
   SHELL="/bin/sh" \
-  TERM="xterm-256color" \
+  TERM="xterm-256color"
 
 COPY ./rootfs/. /
 

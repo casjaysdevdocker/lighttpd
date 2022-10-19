@@ -24,7 +24,7 @@ RUN set -ex; \
   if [ "${ALPINE_VERSION}" = "edge" ]; then echo "http://dl-cdn.alpinelinux.org/alpine/${ALPINE_VERSION}/testing" >>"/etc/apk/repositories" ; fi ; \
   apk update --update-cache && apk add \
   bash iproute2 \
-  spawn-fcgi lighttpd lighttpd-mod_auth lighttpd-mod_webdav && \
+  spawn-fcgi lighttpd lighttpd-mod_auth lighttpd-mod_webdav python3 ruby perl perl-cgi php8-cgi && \
   cp -Rf "/etc/lighttpd" "$DEFAULT_TEMPLATE_DIR/lighttpd"
 
 
@@ -45,7 +45,7 @@ ARG \
   SERVICE_PORT="80" \
   EXPOSE_PORTS="80" \
   PHP_SERVER="lighttpd" \
-  NODE_VERSION="14" \
+  NODE_VERSION="system" \
   NODE_MANAGER="system" \
   BUILD_VERSION="latest" \
   LICENSE="MIT" \

@@ -25,7 +25,7 @@
     <meta name="Keywords" content="Casjay, CasjaysDev, Jason M. Hempstead, Website, About Me">
     <meta name="Description" content="Created By Casjays Developments">
     <meta name="generator" content="CasjaysDev">
-    <link rel="shortcut icon" href="https://static.casjay.net/favicon.ico" />
+    <link rel="shortcut icon" href="https://casjaysdev-sites.github.io/static/favicon.ico" />
 
 <!-- Begin Main Site -->
     <title>PHP Info</title>
@@ -42,4 +42,3 @@
 
 </body>
 </html>
-

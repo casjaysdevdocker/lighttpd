@@ -53,7 +53,7 @@ ARG \
   BUILD_DATE="Tue 18 Oct 2022 04:46:07 PM EDT" \
   TIMEZONE="America/New_York"
 
-LABEL maintainer="CasjaysDev <docker-admin@casjaysdev.com>" \
+LABEL maintainer="CasjaysDev <docker-admin@casjaysdev.pro>" \
   org.opencontainers.image.vendor="CasjaysDev" \
   org.opencontainers.image.authors="CasjaysDev" \
   org.opencontainers.image.vcs-type="Git" \

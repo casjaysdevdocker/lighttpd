@@ -1,6 +1,4 @@
-FROM casjaysdevdocker/php:latest AS build
-
-ARG ALPINE_VERSION="v3.16"
+FROM casjaysdevdocker/php:3.16 AS build
 
 ARG DEFAULT_DATA_DIR="/usr/local/share/template-files/data" \
   DEFAULT_CONF_DIR="/usr/local/share/template-files/config" \
@@ -93,4 +91,3 @@ EXPOSE $EXPOSE_PORTS
 #CMD [ "" ]
 ENTRYPOINT [ "tini", "-p", "SIGTERM", "--", "/usr/local/bin/entrypoint-lighttpd.sh" ]
 HEALTHCHECK --start-period=1m --interval=2m --timeout=3s CMD [ "/usr/local/bin/entrypoint-lighttpd.sh", "healthcheck" ]
-

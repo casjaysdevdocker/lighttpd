@@ -19,8 +19,8 @@ dockermgr update lighttpd
 ## Install and run container
   
 ```shell
-dockerHome="/var/lib/srv/$USER/docker/casjaysdevdocker/lighttpd/lighttpd/latest/rootfs"
-mkdir -p "/var/lib/srv/$USER/docker/lighttpd/rootfs"
+dockerHome="/srv/$USER/docker/casjaysdevdocker/lighttpd/lighttpd/latest/rootfs"
+mkdir -p "/srv/$USER/docker/lighttpd/rootfs"
 git clone "https://github.com/dockermgr/lighttpd" "$HOME/.local/share/CasjaysDev/dockermgr/lighttpd"
 cp -Rfva "$HOME/.local/share/CasjaysDev/dockermgr/lighttpd/rootfs/." "$dockerHome/"
 docker run -d \
@@ -47,8 +47,8 @@ services:
       - TZ=America/New_York
       - HOSTNAME=lighttpd
     volumes:
-      - "/var/lib/srv/$USER/docker/casjaysdevdocker/lighttpd/lighttpd/latest/rootfs/data:/data:z"
-      - "/var/lib/srv/$USER/docker/casjaysdevdocker/lighttpd/lighttpd/latest/rootfs/config:/config:z"
+      - "/srv/$USER/docker/casjaysdevdocker/lighttpd/lighttpd/latest/rootfs/data:/data:z"
+      - "/srv/$USER/docker/casjaysdevdocker/lighttpd/lighttpd/latest/rootfs/config:/config:z"
     ports:
       - 80:80
     restart: always
